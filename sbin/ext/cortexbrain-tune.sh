@@ -50,8 +50,8 @@ else
 fi;
 
 # set initial vm.dirty vales
-echo "600" > /proc/sys/vm/dirty_writeback_centisecs;
-echo "3000" > /proc/sys/vm/dirty_expire_centisecs;
+echo "500" > /proc/sys/vm/dirty_writeback_centisecs;
+echo "200" > /proc/sys/vm/dirty_expire_centisecs;
 
 # ==============================================================
 # FILES FOR VARIABLES || we need this for write variables from child-processes to parent
@@ -539,12 +539,12 @@ CPU_GOV_TWEAKS()
 			freq_for_responsiveness_tmp="$freq_responsiveness_tmp";
 		fi;
 
-		local sampling_down_max_mom_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/sampling_down_max_mom";
+		local sampling_down_max_mom_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/sampling_down_max_momentum";
 		if [ ! -e "$sampling_down_max_mom_tmp" ]; then
 			sampling_down_max_mom_tmp="/dev/null";
 		fi;
 
-		local sampling_down_mom_sens_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/sampling_down_mom_sens";
+		local sampling_down_mom_sens_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/sampling_down_momentum_sensitivity";
 		if [ ! -e "$sampling_down_mom_sens_tmp" ]; then
 			sampling_down_mom_sens_tmp="/dev/null";
 		fi;
@@ -579,9 +579,14 @@ CPU_GOV_TWEAKS()
 			freq_limit_tmp="/dev/null";
 		fi;
 
-		local fast_scaling_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/fast_scaling";
-		if [ ! -e "$fast_scaling_tmp" ]; then
-			fast_scaling_tmp="/dev/null";
+		local fast_scaling_up_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/fast_scaling_up";
+		if [ ! -e "$fast_scaling_up_tmp" ]; then
+			fast_scaling_up_tmp="/dev/null";
+		fi;
+
+		local fast_scaling_down_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/fast_scaling_down";
+		if [ ! -e "$fast_scaling_down_tmp" ]; then
+			fast_scaling_down_tmp="/dev/null";
 		fi;
 
 		local early_demand_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/early_demand";
@@ -597,6 +602,11 @@ CPU_GOV_TWEAKS()
 		local disable_hotplug_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/disable_hotplug";
 		if [ ! -e "$disable_hotplug_tmp" ]; then
 			disable_hotplug_tmp="/dev/null";
+		fi;
+
+		local profile_number_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/profile_number";
+		if [ ! -e "$profile_number_tmp" ]; then
+			profile_number_tmp="/dev/null";
 		fi;
 
 		local boostfreq_tmp="/sys/devices/system/cpu/cpufreq/$SYSTEM_GOVERNOR/boostfreq";
@@ -676,10 +686,12 @@ CPU_GOV_TWEAKS()
 			echo "$down_threshold_hp_freq_fst" > "$down_threshold_hp_freq_fst_tmp";
 			echo "$smooth_up" > "$smooth_up_tmp";
 			echo "$freq_limit" > "$freq_limit_tmp";
-			echo "$fast_scaling" > "$fast_scaling_tmp";
+			echo "$fast_scaling_up" > "$fast_scaling_up_tmp";
+			echo "$fast_scaling_down" > "$fast_scaling_down_tmp";
 			echo "$early_demand" > "$early_demand_tmp";
 			echo "$grad_up_threshold" > "$grad_up_threshold_tmp";
 			echo "$disable_hotplug" > "$disable_hotplug_tmp";
+			echo "$profile_number" > "$profile_number_tmp";
 			echo "$boostfreq" > "$boostfreq_tmp";
 		fi;
 
@@ -702,13 +714,13 @@ fi;
 MEMORY_TWEAKS()
 {
 	if [ "$cortexbrain_memory" == "on" ]; then
-		echo "$dirty_background_ratio" > /proc/sys/vm/dirty_background_ratio; # default: 10
+		echo "$dirty_background_ratio" > /proc/sys/vm/dirty_background_ratio; # default: 5
 		echo "$dirty_ratio" > /proc/sys/vm/dirty_ratio; # default: 20
 		echo "4" > /proc/sys/vm/min_free_order_shift; # default: 4
 		echo "1" > /proc/sys/vm/overcommit_memory; # default: 1
 		echo "50" > /proc/sys/vm/overcommit_ratio; # default: 50
 		echo "3" > /proc/sys/vm/page-cluster; # default: 3
-		echo "8192" > /proc/sys/vm/min_free_kbytes;
+		#echo "8192" > /proc/sys/vm/min_free_kbytes;
 
 		log -p i -t "$FILE_NAME" "*** MEMORY_TWEAKS ***: enabled";
 

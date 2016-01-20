@@ -30,6 +30,9 @@ echo "2" > /proc/sys/kernel/sysrq;
 # bypass for reboot command till fixed.
 rm -f /sbin/reboot;
 
+# fix storage folder owner
+$BB chown system.sdcard_rw /storage;
+
 PIDOFINIT=$(pgrep -f "/sbin/ext/post-init.sh");
 for i in $PIDOFINIT; do
 	echo "-600" > /proc/"$i"/oom_score_adj;
@@ -109,7 +112,7 @@ if [ "$mdniemod" == "on" ]; then
 fi;
 
 # Apps and ROOT Install
-$BB sh /sbin/ext/install.sh;
+# $BB sh /sbin/ext/install.sh;
 
 # Clean /res/ from no longer needed files to free modules kernel allocated mem
 $BB rm -rf /res/misc/sql /res/images /res/misc/JellyB-* /res/misc/KitKat-CM-AOKP-11 /res/misc/vendor;
@@ -273,7 +276,7 @@ if [ "$logger" == "off" ]; then
 	echo "0" > /sys/module/ump/parameters/ump_debug_level;
 	echo "0" > /sys/module/mali/parameters/mali_debug_level;
 	echo "0" > /sys/module/kernel/parameters/initcall_debug;
-#	echo "0" > /sys/module/lowmemorykiller/parameters/debug_level;
+	echo "0" > /sys/module/lowmemorykiller/parameters/debug_level;
 	echo "0" > /sys/module/cpuidle_exynos4/parameters/log_en;
 	echo "0" > /sys/module/earlysuspend/parameters/debug_mask;
 	echo "0" > /sys/module/alarm/parameters/debug_mask;

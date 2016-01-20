@@ -46,16 +46,8 @@ case "${scheduler}" in
 		BLOCK_GOV=sio;
 		SCHED_SET;
 	;;
-	vr)
-		BLOCK_GOV=vr;
-		SCHED_SET;
-	;;
 	zen)
 		BLOCK_GOV=zen;
-		SCHED_SET;
-	;;
-	fifo)
-		BLOCK_GOV=fifo;
 		SCHED_SET;
 	;;
 	fiops)
