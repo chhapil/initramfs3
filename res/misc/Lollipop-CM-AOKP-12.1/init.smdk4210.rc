@@ -46,9 +46,6 @@ on fs
 
 on charger
 
-# CPU Frequency Governor
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
-
 # EHCI runtime enable for LPA
     write /sys/devices/platform/s5p-ehci/power/control auto
 
@@ -326,9 +323,6 @@ on boot
     setprop ro.nfc.port "I2C"
     chmod 0600 /dev/pn544
     chown nfc nfc /dev/pn544
-
-# Device Encryption by B2B Security Lab. 
-    setprop ro.crypto.keyfile.userdata /efs/metadata
 
 # fake some battery state
     setprop status.battery.state Slow

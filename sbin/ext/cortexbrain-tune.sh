@@ -164,13 +164,6 @@ KERNEL_TWEAKS()
 	else
 		echo "kernel_tweaks disabled";
 	fi;
-	if [ "$cortexbrain_memory" == "on" ]; then
-		echo "32 32" > /proc/sys/vm/lowmem_reserve_ratio;
-
-		log -p i -t "$FILE_NAME" "*** MEMORY_TWEAKS ***: enabled";
-	else
-		echo "memory_tweaks disabled";
-	fi;
 }
 apply_cpu="$2";
 if [ "$apply_cpu" != "update" ]; then
@@ -308,7 +301,7 @@ CPU_HOTPLUG_TWEAKS()
 	fi;
 
 	if [ "$hotplug_enable" -eq "1" ]; then
-		if [ "$SYSTEM_GOVERNOR" == "nightmare" ] || [ "$SYSTEM_GOVERNOR" == "darkness" ] || [ "$SYSTEM_GOVERNOR" == "zzmanX" ]; then
+		if [ "$SYSTEM_GOVERNOR" == "nightmare" ] || [ "$SYSTEM_GOVERNOR" == "darkness" ] || [ "$SYSTEM_GOVERNOR" == "zzmoove" ]; then
 			#disable intelli_plug
 			if [ "$intelli_value_tmp" -eq "1" ]; then
 				echo "0" > $intelli_plug_active_tmp;
@@ -406,6 +399,23 @@ TWEAK_HOTPLUG_ECO()
 
 	log -p i -t "$FILE_NAME" "*** TWEAK_HOTPLUG_ECO: $state ***";
 }
+
+WORKQUEUE_CONTROL()
+{
+	local state="$1";
+
+	if [ "$state" == "awake" ]; then
+		if [ "$power_efficient" == "on" ]; then
+			echo "Y" > /sys/module/workqueue/parameters/power_efficient;
+		else
+			echo "N" > /sys/module/workqueue/parameters/power_efficient;
+		fi;
+	elif [ "$state" == "sleep" ]; then
+		echo "Y" > /sys/module/workqueue/parameters/power_efficient;
+	fi;
+	log -p i -t "$FILE_NAME" "*** WORKQUEUE_CONTROL ***: done";
+}
+
 
 CPU_GOV_TWEAKS()
 {
@@ -662,7 +672,7 @@ CPU_GOV_TWEAKS()
 			echo "$sampling_down_factor" > "$sampling_down_factor_tmp";
 			echo "$down_differential" > "$down_differential_tmp";
 			echo "$freq_step_at_min_freq" > "$freq_step_at_min_freq_tmp";
-			if [ "$SYSTEM_GOVERNOR" == "zzmanX" ]; then
+			if [ "$SYSTEM_GOVERNOR" == "zzmoove" ]; then
 				echo "5" > "$freq_step_tmp";
 			else
 				echo "$freq_step" > "$freq_step_tmp";
