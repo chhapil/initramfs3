@@ -278,21 +278,17 @@ CPU_HOTPLUG_TWEAKS()
 	fi;
 
 	# Alucard hotplug
-	if [ -e /sys/devices/system/cpu/cpufreq/alucard_hotplug ]; then
-		local hotplug_enable_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/hotplug_enable";
-		local alucard_value_tmp=$(cat /sys/devices/system/cpu/cpufreq/alucard_hotplug/hotplug_enable);
-		local cpu_up_rate_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/cpu_up_rate";
-		local cpu_down_rate_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/cpu_down_rate";
-		local hotplug_freq_fst_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/hotplug_freq_1_1";
-		local hotplug_freq_snd_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/hotplug_freq_2_0";
-		local up_load_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/hotplug_load_1_1";
-		local down_load_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/hotplug_load_2_0";
-		local maxcoreslimit_tmp="/sys/devices/system/cpu/cpufreq/alucard_hotplug/maxcoreslimit";
+	if [ -e /sys/kernel/alucard_hotplug ]; then
+		local hotplug_enable_tmp="/sys/kernel/alucard_hotplug/hotplug_enable";
+		local alucard_value_tmp=$(cat /sys/kernel/alucard_hotplug/hotplug_enable);
+		local hotplug_freq_fst_tmp="/sys/kernel/alucard_hotplug/hotplug_freq_1_1";
+		local hotplug_freq_snd_tmp="/sys/kernel/alucard_hotplug/hotplug_freq_2_0";
+		local up_load_tmp="/sys/kernel/alucard_hotplug/hotplug_load_1_1";
+		local down_load_tmp="/sys/kernel/alucard_hotplug/hotplug_load_2_0";
+		local maxcoreslimit_tmp="/sys/kernel/alucard_hotplug/maxcoreslimit";
 	else
 		hotplug_enable_tmp="/dev/null";
 		alucard_value_tmp="/dev/null";
-		cpu_up_rate_tmp="/dev/null";
-		cpu_down_rate_tmp="/dev/null";
 		hotplug_freq_fst_tmp="/dev/null";
 		hotplug_freq_snd_tmp="/dev/null";
 		up_load_tmp="/dev/null";
@@ -361,8 +357,6 @@ CPU_HOTPLUG_TWEAKS()
 
 	# sleep-settings
 	if [ "$state" == "sleep" ]; then
-		echo "$cpu_up_rate_sleep" > "$cpu_up_rate_tmp";
-		echo "$cpu_down_rate_sleep" > "$cpu_down_rate_tmp";
 		echo "$hotplug_freq_fst_sleep" > "$hotplug_freq_fst_tmp";
 		echo "$hotplug_freq_snd_sleep" > "$hotplug_freq_snd_tmp";
 		echo "$up_load_sleep" > "$up_load_tmp";
@@ -370,8 +364,6 @@ CPU_HOTPLUG_TWEAKS()
 		echo "1" > "$maxcoreslimit_tmp";
 	# awake-settings
 	elif [ "$state" == "awake" ]; then
-		echo "$cpu_up_rate" > "$cpu_up_rate_tmp";
-		echo "$cpu_down_rate" > "$cpu_down_rate_tmp";
 		echo "$hotplug_freq_fst" > "$hotplug_freq_fst_tmp";
 		echo "$hotplug_freq_snd" > "$hotplug_freq_snd_tmp";
 		echo "$up_load" > "$up_load_tmp";
