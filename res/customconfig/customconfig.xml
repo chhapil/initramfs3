@@ -302,7 +302,7 @@
 
 <settingsTab name="HOTPLUG">
 
-	<settingsPane description="Here you can manage hotplugging settings. These settings are active only if the screen is on. !!! Depends on CortexBrain-Background-Process and CortexBrain-CPU-Tweaks!!!" name="Hotplug tuning">
+	<settingsPane description="Here you can manage hotplugging settings. !!! Depends on CortexBrain-Background-Process and CortexBrain-CPU-Tweaks!!!" name="Hotplug tuning">
 
 		<spinner description="CPU Governor Hot plugging Configuration. if this options is set to Disabled, Second core will always be OFF or ON. if set to Enabled Auto, cortex will choose the best hotplug code for active GOV, or you can force using Alucard HotPlug code, or Intelli HotPlug code, best leave it AUTO (Default: Enabled Auto)" name="hotplug_enable" action="generic_cortex /tmp/hotplug_enable">
 			<spinnerItem name="Disabled" value="0"/> 
