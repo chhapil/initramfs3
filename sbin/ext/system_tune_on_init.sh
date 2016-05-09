@@ -28,7 +28,7 @@ $BB rm -rf /data/anr/* 2> /dev/null;
 # critical Permissions fix
 $BB chown -R root:system /sys/devices/system/cpu/;
 $BB chown -R system:system /data/anr;
-$BB chown -R root:root /data/property/;
+$BB chown -R root:radio /data/property/;
 $BB chmod -R 777 /tmp/;
 $BB chmod -R 6755 /sbin/ext/;
 $BB chmod -R 0777 /dev/cpuctl/;
