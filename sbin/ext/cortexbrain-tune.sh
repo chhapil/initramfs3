@@ -281,6 +281,8 @@ CPU_HOTPLUG_TWEAKS()
 	if [ -e /sys/kernel/alucard_hotplug ]; then
 		local hotplug_enable_tmp="/sys/kernel/alucard_hotplug/hotplug_enable";
 		local alucard_value_tmp=$(cat /sys/kernel/alucard_hotplug/hotplug_enable);
+		local cpu_up_rate_tmp="/sys/kernel/alucard_hotplug/cpu_up_rate";
+		local cpu_down_rate_tmp="/sys/kernel/alucard_hotplug/cpu_down_rate";
 		local hotplug_freq_fst_tmp="/sys/kernel/alucard_hotplug/hotplug_freq_1_1";
 		local hotplug_freq_snd_tmp="/sys/kernel/alucard_hotplug/hotplug_freq_2_0";
 		local up_load_tmp="/sys/kernel/alucard_hotplug/hotplug_load_1_1";
@@ -289,6 +291,8 @@ CPU_HOTPLUG_TWEAKS()
 	else
 		hotplug_enable_tmp="/dev/null";
 		alucard_value_tmp="/dev/null";
+		cpu_up_rate_tmp="/dev/null";
+		cpu_down_rate_tmp="/dev/null";
 		hotplug_freq_fst_tmp="/dev/null";
 		hotplug_freq_snd_tmp="/dev/null";
 		up_load_tmp="/dev/null";
@@ -297,7 +301,7 @@ CPU_HOTPLUG_TWEAKS()
 	fi;
 
 	if [ "$hotplug_enable" -eq "1" ]; then
-		if [ "$SYSTEM_GOVERNOR" == "nightmare" ] || [ "$SYSTEM_GOVERNOR" == "darkness" ] || [ "$SYSTEM_GOVERNOR" == "zzmoove" ]; then
+		if [ "$SYSTEM_GOVERNOR" == "nightmare" ] || [ "$SYSTEM_GOVERNOR" == "darkness" ]; then
 			#disable intelli_plug
 			if [ "$intelli_value_tmp" -eq "1" ]; then
 				echo "0" > $intelli_plug_active_tmp;
@@ -357,6 +361,8 @@ CPU_HOTPLUG_TWEAKS()
 
 	# sleep-settings
 	if [ "$state" == "sleep" ]; then
+		echo "$cpu_up_rate_sleep" > "$cpu_up_rate_tmp";
+		echo "$cpu_down_rate_sleep" > "$cpu_down_rate_tmp";
 		echo "$hotplug_freq_fst_sleep" > "$hotplug_freq_fst_tmp";
 		echo "$hotplug_freq_snd_sleep" > "$hotplug_freq_snd_tmp";
 		echo "$up_load_sleep" > "$up_load_tmp";
@@ -364,6 +370,8 @@ CPU_HOTPLUG_TWEAKS()
 		echo "1" > "$maxcoreslimit_tmp";
 	# awake-settings
 	elif [ "$state" == "awake" ]; then
+		echo "$cpu_up_rate" > "$cpu_up_rate_tmp";
+		echo "$cpu_down_rate" > "$cpu_down_rate_tmp";
 		echo "$hotplug_freq_fst" > "$hotplug_freq_fst_tmp";
 		echo "$hotplug_freq_snd" > "$hotplug_freq_snd_tmp";
 		echo "$up_load" > "$up_load_tmp";
@@ -663,12 +671,8 @@ CPU_GOV_TWEAKS()
 			echo "$sampling_up_factor" > "$sampling_up_factor_tmp";
 			echo "$sampling_down_factor" > "$sampling_down_factor_tmp";
 			echo "$down_differential" > "$down_differential_tmp";
+			echo "$freq_step" > "$freq_step_tmp";
 			echo "$freq_step_at_min_freq" > "$freq_step_at_min_freq_tmp";
-			if [ "$SYSTEM_GOVERNOR" == "zzmoove" ]; then
-				echo "5" > "$freq_step_tmp";
-			else
-				echo "$freq_step" > "$freq_step_tmp";
-			fi;
 			echo "$freq_step_dec" > "$freq_step_dec_tmp";
 			echo "$freq_step_dec_at_max_freq" > "$freq_step_dec_at_max_freq_tmp";
 			echo "$freq_for_responsiveness" > "$freq_for_responsiveness_tmp";
@@ -716,7 +720,7 @@ fi;
 MEMORY_TWEAKS()
 {
 	if [ "$cortexbrain_memory" == "on" ]; then
-		echo "$dirty_background_ratio" > /proc/sys/vm/dirty_background_ratio; # default: 5
+		echo "$dirty_background_ratio" > /proc/sys/vm/dirty_background_ratio; # default: 10
 		echo "$dirty_ratio" > /proc/sys/vm/dirty_ratio; # default: 20
 		echo "4" > /proc/sys/vm/min_free_order_shift; # default: 4
 		echo "1" > /proc/sys/vm/overcommit_memory; # default: 1
