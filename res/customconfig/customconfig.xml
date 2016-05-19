@@ -816,6 +816,8 @@
 	<settingsPane description="Show Storage status, you can see if you have errors in system, data, cache, efs or preloaded partitions, this will only SHOW if all OK, or there are errors! will not fix them. (clean = no errors)" name="Partitions Scan">
 
 		<button description="Use this to check your data, system, cache, efs, and preloaded partitions for errors. This will not FIX any errors, just check! To fix, backup your files with some backups app, then push the data and cache fix button. It is BETTER to have a clean partition then broken and unstable system." name="Partition Status" action="push-actions/partitions_scan" label="Partition Status"/>
+                
+                <button description="Use this to trim your DATA, SYSTEM, CACHE and PRELOAD partitions. Trimming will take max 2 to 5 mins based on your partitions sizes." name="TRIM-PARTITIONS" action="push-actions/trim_partitions" label="TRIM PARTITIONS"/>
 
 	</settingsPane>
 
