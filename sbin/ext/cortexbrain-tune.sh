@@ -50,7 +50,7 @@ else
 fi;
 
 # set initial vm.dirty vales
-echo "600" > /proc/sys/vm/dirty_writeback_centisecs;
+echo "500" > /proc/sys/vm/dirty_writeback_centisecs;
 echo "3000" > /proc/sys/vm/dirty_expire_centisecs;
 
 # ==============================================================
@@ -1544,6 +1544,7 @@ AWAKE_MODE()
 			MOBILE_DATA "awake";
 			WIFI "awake";
 			IO_SCHEDULER "awake";
+			WORKQUEUE_CONTROL "awake";
 			GESTURES "awake";
 			MOUNT_SD_CARD;
 
@@ -1624,6 +1625,7 @@ SLEEP_MODE()
 			CENTRAL_CPU_FREQ "sleep_freq";
 			CPU_GOV_TWEAKS "sleep";
 			IO_SCHEDULER "sleep";
+			WORKQUEUE_CONTROL "sleep";
 			BUS_THRESHOLD "sleep";
 #			KERNEL_SCHED "sleep";
 			NET "sleep";
@@ -1653,11 +1655,6 @@ SLEEP_MODE()
 			# Early Wakeup detected
 			log -p i -t "$FILE_NAME" "*** early wake up: SLEEP aborted! ***";
 		fi;
-	fi;
-
-	if [ "$auto_oom" == "on" ]; then
-		sleep 1;
-		$BB sh /res/uci.sh oom_config_screen_off $oom_config_screen_off;
 	fi;
 }
 

@@ -145,7 +145,7 @@
 
 		<seekBar description="After spending sampling_down_factor X sampling_rate micro seconds at maximum frequency on high load, governor samples the load again to calculate an approx target frequency to scale-down-to which should not trigger up_threshold in the next sample. (Triggering up threshold may cause jumping to max frequency again). Max_load_freq is checked against (up_threshold - down_differential) X current frequency. If found to be smaller, CPU is scaled down to a target frequency as described above. Down_differential also act as the factor to prevent aggressive scale down. (Only for HYPER, Ondemand, intellidemand, PegasusQ, Sleepy) (default: 5)" name="down_differential" action="generic_cortex /tmp/down_differential" unit="int" min="1" reversed="false" step="1" max="80"/>
 
-		<seekBar description="Until freq_for_responsiveness, Up Threshold considered for sampling load is up_threshold_at_min_freq. Also during the part where CPU is at maximum load frequency, governor need to find the optimal frequency as the next frequency - which should not trigger up_threshold in the next sampling. When such a frequency_next is found to be a) less than freq_for_responsiveness b) will not trigger down_threshold in the next sample, then the optimal frequency is set to freq_for_responsiveness. (Only for HYPER, PegasusQ, Nightmare) (Default: 400000 kHz)" name="freq_for_responsiveness" action="generic_cortex /tmp/freq_for_responsiveness" unit="kHz" min="100000" reversed="false" step="100000" max="1000000"/>
+		<seekBar description="Until freq_for_responsiveness, Up Threshold considered for sampling load is up_threshold_at_min_freq. Also during the part where CPU is at maximum load frequency, governor need to find the optimal frequency as the next frequency - which should not trigger up_threshold in the next sampling. When such a frequency_next is found to be a) less than freq_for_responsiveness b) will not trigger down_threshold in the next sample, then the optimal frequency is set to freq_for_responsiveness. (Only for PegasusQ, Nightmare) (Default: 400000 kHz)" name="freq_for_responsiveness" action="generic_cortex /tmp/freq_for_responsiveness" unit="kHz" min="100000" reversed="false" step="100000" max="1000000"/>
 
 		<seekBar description="This is same as the up_threshold found for the Ondemand governor but for the opposite direction. For example when set to its default value of 30 it means that if the CPU usage needs to be below 30% between samples to have the frequency decreased. (Only for Conservative, zzmoove) (Default: 30%)" name="down_threshold" action="generic_cortex /tmp/down_threshold" unit="%" min="1" reversed="false" step="1" max="100"/>
 
@@ -419,7 +419,7 @@
 			<spinnerItem name="high pressure" value="high_pressure"/> 
 		</spinner>
 
-		<seekBar description="Dirty background memory buffer, more you set, more memory will be used for write buffer for background operations. Buffer is released on need to free RAM (Default: 5%)" name="Dirty Background ratio" action="generic /proc/sys/vm/dirty_background_ratio" unit="%" min="5" reversed="false" step="5" max="80"/>
+		<seekBar description="Dirty background memory buffer, more you set, more memory will be used for write buffer for background operations. Buffer is released on need to free RAM (Default: 15%)" name="Dirty Background ratio" action="generic /proc/sys/vm/dirty_background_ratio" unit="%" min="5" reversed="false" step="5" max="80"/>
 
 		<seekBar description="Dirty real time memory buffer, more you set, more memory will be used for write buffer for real time operations. Buffer is released on need to free RAM (Default: 20%)" name="Dirty ratio" action="generic /proc/sys/vm/dirty_ratio" unit="%" min="5" reversed="false" step="5" max="90"/>
 
@@ -741,6 +741,13 @@
 		</spinner>
 
 	</settingsPane>	
+
+	<settingsPane description="Software CRCs help protect the integrity of data, preventing data loss after a sudden power cut. Enabling software CRCs on the data blocks can be a significant (30%) performance overhead, and for other reasons may not always be desired." name="Software CRC control">
+
+		<checkbox description="Enable or disable software CRCs. I do not recommend disabling this as you will be at risk of data loss! However for whatever reason you want to disable this, you can do so by unchecking this. This should only be changed if you know what you are doing! (Default: Enabled)" name="Toggle Software CRCs"  action="generic01 /sys/module/mmc_core/parameters/use_spi_crc" label="Software CRCs"/>
+
+	</settingsPane>
+
 
 	<settingsPane description="WIFI Settings" name="WIFI">
 
